@@ -1,0 +1,243 @@
+[
+    {
+        "Id": 2,
+        "NombreUsuario": "Lucas",
+        "ApellidoUsuario": "Ibarra",
+        "UserName": "lucas2",
+        "Correo": "blasrafael1986@gmail.com",
+        "FechaRegistro": "11/08/2026 02:45:00",
+        "IsAdmin": false,
+        "EstadisticasModelos": {
+            "Cantidad": 0,
+            "Tokens": {
+                "InputTokens": 0,
+                "OutputTokens": 0,
+                "ThoughtsTokens": 0,
+                "TotalTokens": 0
+            }
+        },
+        "ImagenesPendientes": {
+            "Cantidad": 0,
+            "TareasNoProcesadas": 0,
+            "TotalTamañoImagenNoProcesadas": 0
+        },
+        "ImagenesReportadas": {
+            "Cantidad": 0,
+            "Pendiente": 0,
+            "Resuelto": 0
+        },
+        "MovimientosGastos": {
+            "Cantidad": 0,
+            "Activos": 0,
+            "NoActivos": 0,
+            "TamañoImagen": {
+                "Activos": 0,
+                "NoActivos": 0,
+                "Total": 0
+            }
+        },
+        "Sesiones": {
+            "Cantidad": 1,
+            "Dispositivos": [
+                "PostmanRuntime/7.37.3"
+            ],
+            "Ips": [
+                "127.0.0.1"
+            ],
+            "FechasConexion": [
+                {
+                    "Fecha": "26/08/2026",
+                    "Cantidad": 1
+                }
+            ],
+            "SesionesActivas": []
+        }
+    },
+    {
+        "Id": 3,
+        "NombreUsuario": "Lucas Mateo",
+        "ApellidoUsuario": "Ibarra",
+        "UserName": "mati",
+        "Correo": "lucas@gmail.com",
+        "FechaRegistro": "03/09/2026 02:10:40",
+        "IsAdmin": false,
+        "EstadisticasModelos": {
+            "Cantidad": 0,
+            "Tokens": {
+                "InputTokens": 0,
+                "OutputTokens": 0,
+                "ThoughtsTokens": 0,
+                "TotalTokens": 0
+            }
+        },
+        "ImagenesPendientes": {
+            "Cantidad": 0,
+            "TareasNoProcesadas": 0,
+            "TotalTamañoImagenNoProcesadas": 0
+        },
+        "ImagenesReportadas": {
+            "Cantidad": 0,
+            "Pendiente": 0,
+            "Resuelto": 0
+        },
+        "MovimientosGastos": {
+            "Cantidad": 0,
+            "Activos": 0,
+            "NoActivos": 0,
+            "TamañoImagen": {
+                "Activos": 0,
+                "NoActivos": 0,
+                "Total": 0
+            }
+        },
+        "Sesiones": {
+            "Cantidad": 4,
+            "Dispositivos": [
+                "PostmanRuntime/7.37.3"
+            ],
+            "Ips": [
+                "127.0.0.1"
+            ],
+            "FechasConexion": [
+                {
+                    "Fecha": "20/09/2026",
+                    "Cantidad": 4
+                }
+            ],
+            "SesionesActivas": [
+                {
+                    "Dispositivo": "PostmanRuntime/7.37.3",
+                    "Ip": "127.0.0.1",
+                    "FechaConexion": "20/09/2026 23:13:19",
+                    "Movil": "No"
+                }
+            ]
+        }
+    },
+    {
+        "Id": 1,
+        "NombreUsuario": "Lucas",
+        "ApellidoUsuario": "Ibarra",
+        "UserName": "lucas",
+        "Correo": "blasrafael1986@gmail.com",
+        "FechaRegistro": "11/08/2026 02:35:15",
+        "IsAdmin": true,
+        "EstadisticasModelos": {
+            "Cantidad": 27,
+            "Tokens": {
+                "InputTokens": 121006,
+                "OutputTokens": 6889,
+                "ThoughtsTokens": 4856,
+                "TotalTokens": 185584
+            }
+        },
+        "ImagenesPendientes": {
+            "Cantidad": 9,
+            "TareasNoProcesadas": 0,
+            "TotalTamañoImagenNoProcesadas": 0
+        },
+        "ImagenesReportadas": {
+            "Cantidad": 2,
+            "Pendiente": 2,
+            "Resuelto": 0
+        },
+        "MovimientosGastos": {
+            "Cantidad": 15,
+            "Activos": 12,
+            "NoActivos": 3,
+            "TamañoImagen": {
+                "Activos": 891017,
+                "NoActivos": 306690,
+                "Total": 1197707
+            }
+        },
+        "Sesiones": {
+            "Cantidad": 110,
+            "Dispositivos": [
+                "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Mobile Safari/537.36",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+                "PostmanRuntime/7.37.3",
+                "okhttp/4.12.0"
+            ],
+            "Ips": [
+                "127.0.0.1",
+                "192.168.1.101",
+                "192.168.1.102"
+            ],
+            "FechasConexion": [
+                {
+                    "Fecha": "26/08/2026",
+                    "Cantidad": 11
+                },
+                {
+                    "Fecha": "27/08/2026",
+                    "Cantidad": 3
+                },
+                {
+                    "Fecha": "28/08/2026",
+                    "Cantidad": 5
+                },
+                {
+                    "Fecha": "29/08/2026",
+                    "Cantidad": 2
+                },
+                {
+                    "Fecha": "02/09/2026",
+                    "Cantidad": 4
+                },
+                {
+                    "Fecha": "03/09/2026",
+                    "Cantidad": 2
+                },
+                {
+                    "Fecha": "08/09/2026",
+                    "Cantidad": 23
+                },
+                {
+                    "Fecha": "09/09/2026",
+                    "Cantidad": 15
+                },
+                {
+                    "Fecha": "11/09/2026",
+                    "Cantidad": 5
+                },
+                {
+                    "Fecha": "12/09/2026",
+                    "Cantidad": 2
+                },
+                {
+                    "Fecha": "14/09/2026",
+                    "Cantidad": 4
+                },
+                {
+                    "Fecha": "15/09/2026",
+                    "Cantidad": 2
+                },
+                {
+                    "Fecha": "17/09/2026",
+                    "Cantidad": 4
+                },
+                {
+                    "Fecha": "19/09/2026",
+                    "Cantidad": 4
+                },
+                {
+                    "Fecha": "20/09/2026",
+                    "Cantidad": 22
+                },
+                {
+                    "Fecha": "21/09/2026",
+                    "Cantidad": 2
+                }
+            ],
+            "SesionesActivas": [
+                {
+                    "Dispositivo": "PostmanRuntime/7.37.3",
+                    "Ip": "127.0.0.1",
+                    "FechaConexion": "21/09/2026 00:05:50",
+                    "Movil": "No"
+                }
+            ]
+        }
+    }
+]

@@ -1,12 +1,44 @@
-import { useNavigate } from 'react-router'
+import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router'
+import request from '../../Api/request'
+import { useAuth } from '../../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const expiredMessage = location.state?.message
 
-  const handleLogin = () => {
-  localStorage.setItem('isAuthenticated', 'true')
-  navigate('/home')
-}
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    setError('')
+    setIsSubmitting(true)
+
+    const formData = new FormData(event.currentTarget)
+    formData.append('sesion-admin', '1')
+    const response = await request({
+      endpoint: 'sessions/login',
+      method: 'POST',
+      body: formData,
+      notifyOnSessionExpired: false, // un 401 acá es "credenciales incorrectas", no expiración
+    })
+
+    setIsSubmitting(false)
+
+    if (response.isSuccessful) {
+      
+      const { UserName, nombre, apellido, fecha_registro } = response.data
+      
+      login({ UserName, nombre, apellido, fecha_registro })
+      navigate('/home', { replace: true })
+      return
+    }
+
+    setError(response.data?.detail || 'Usuario o contraseña incorrectos.')
+  }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-10">
@@ -40,10 +72,7 @@ function Login() {
 
         <div className="bg-white p-7 sm:p-10">
           <form
-            onSubmit={(event) => {
-              event.preventDefault()
-              handleLogin()
-            }}
+            onSubmit={handleLogin}
             className="space-y-5"
           >
             <div className="mb-8">
@@ -67,7 +96,9 @@ function Login() {
               </svg>
               <input
                 id="username"
+                name="username"
                 type="text"
+                required
                 placeholder="Ingresa tu usuario"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
               />
@@ -89,18 +120,27 @@ function Login() {
               </svg>
               <input
                 id="password"
+                name="password"
                 type="password"
+                required
                 placeholder="Ingresa tu contraseña"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
               />
             </div>
           </div>
 
+          {error && (
+            <p className="text-sm font-medium text-red-600" role="alert">
+              {error}
+            </p>
+          )}
+
           <button
             type="submit"
+            disabled={isSubmitting}
             className="group flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3.5 font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:bg-teal-600 hover:shadow-teal-600/20 focus:outline-none focus:ring-4 focus:ring-teal-500/20"
           >
-            Iniciar sesión
+            {isSubmitting ? 'Ingresando...' : 'Iniciar sesión'}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>

@@ -1,9 +1,15 @@
 import { Navigate } from 'react-router'
 
-function ProtectedRoute({ children }) {
-  const isAuthenticated = localStorage.getItem('isAuthenticated')
+import { useAuth } from '../../context/AuthContext'
 
-  if (!isAuthenticated) {
+function ProtectedRoute({ children }) {
+  const { status } = useAuth()
+
+  if (status === 'loading') {
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
+  }
+
+  if (status === 'unauthenticated') {
     return <Navigate to="/login" replace />
   }
 
