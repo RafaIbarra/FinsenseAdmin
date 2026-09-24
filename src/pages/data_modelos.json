@@ -1,0 +1,325 @@
+{
+    "data_tokens": {
+        "total_general": {
+            "InputTokens": 124953,
+            "OutputTokens": 7125,
+            "ThoughtsTokens": 5025,
+            "TotalTokens": 191529
+        },
+        "por_tipo_operacion": [
+            {
+                "InputTokens": 98418,
+                "OutputTokens": 5025,
+                "ThoughtsTokens": 5025,
+                "TotalTokens": 162894,
+                "TipoOperacion": "Extraccion"
+            },
+            {
+                "InputTokens": 26535,
+                "OutputTokens": 2100,
+                "ThoughtsTokens": 0,
+                "TotalTokens": 28635,
+                "TipoOperacion": "Clasificacion"
+            }
+        ],
+        "por_modelo": [
+            {
+                "NombreModelo": "gemini-2.5-flash",
+                "Resumen": {
+                    "InputTokens": 39453,
+                    "OutputTokens": 2300,
+                    "ThoughtsTokens": 2300,
+                    "TotalTokens": 64576
+                },
+                "distribucion": [
+                    {
+                        "InputTokens": 39453,
+                        "OutputTokens": 2300,
+                        "ThoughtsTokens": 2300,
+                        "TotalTokens": 64576,
+                        "TipoOperacion": "Extraccion"
+                    }
+                ]
+            },
+            {
+                "NombreModelo": "qwen/qwen3.8-27b",
+                "Resumen": {
+                    "InputTokens": 932,
+                    "OutputTokens": 67,
+                    "ThoughtsTokens": 0,
+                    "TotalTokens": 999
+                },
+                "distribucion": [
+                    {
+                        "InputTokens": 932,
+                        "OutputTokens": 67,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 999,
+                        "TipoOperacion": "Clasificacion"
+                    }
+                ]
+            },
+            {
+                "NombreModelo": "qwen/qwen3.6-27b",
+                "Resumen": {
+                    "InputTokens": 25603,
+                    "OutputTokens": 2033,
+                    "ThoughtsTokens": 0,
+                    "TotalTokens": 27636
+                },
+                "distribucion": [
+                    {
+                        "InputTokens": 25603,
+                        "OutputTokens": 2033,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 27636,
+                        "TipoOperacion": "Clasificacion"
+                    }
+                ]
+            },
+            {
+                "NombreModelo": "gemini-3.5-flash",
+                "Resumen": {
+                    "InputTokens": 58965,
+                    "OutputTokens": 2725,
+                    "ThoughtsTokens": 2725,
+                    "TotalTokens": 98318
+                },
+                "distribucion": [
+                    {
+                        "InputTokens": 58965,
+                        "OutputTokens": 2725,
+                        "ThoughtsTokens": 2725,
+                        "TotalTokens": 98318,
+                        "TipoOperacion": "Extraccion"
+                    }
+                ]
+            }
+        ],
+        "por_fecha": [
+            {
+                "Año": 2026,
+                "datos": [
+                    {
+                        "NumeroMes": 1,
+                        "Mes": "Enero",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 2,
+                        "Mes": "Febrero",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 3,
+                        "Mes": "Marzo",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 4,
+                        "Mes": "Abril",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 5,
+                        "Mes": "Mayo",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 6,
+                        "Mes": "Junio",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 7,
+                        "Mes": "Julio",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 8,
+                        "Mes": "Agosto",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 9,
+                        "Mes": "Septiembre",
+                        "datos": [
+                            {
+                                "InputTokens": 22719,
+                                "OutputTokens": 1557,
+                                "ThoughtsTokens": 1051,
+                                "TotalTokens": 37682,
+                                "Dia": 12
+                            },
+                            {
+                                "InputTokens": 46648,
+                                "OutputTokens": 2523,
+                                "ThoughtsTokens": 1816,
+                                "TotalTokens": 68608,
+                                "Dia": 14
+                            },
+                            {
+                                "InputTokens": 51639,
+                                "OutputTokens": 2809,
+                                "ThoughtsTokens": 1989,
+                                "TotalTokens": 79294,
+                                "Dia": 15
+                            },
+                            {
+                                "InputTokens": 3947,
+                                "OutputTokens": 236,
+                                "ThoughtsTokens": 169,
+                                "TotalTokens": 5945,
+                                "Dia": 24
+                            }
+                        ]
+                    },
+                    {
+                        "NumeroMes": 10,
+                        "Mes": "Octubre",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 11,
+                        "Mes": "Noviembre",
+                        "datos": []
+                    },
+                    {
+                        "NumeroMes": 12,
+                        "Mes": "Diciembre",
+                        "datos": []
+                    }
+                ]
+            }
+        ]
+    },
+    "data_usuarios": {
+        "datos": [
+            {
+                "NombreUsuario": "mati",
+                "tokens": {
+                    "InputTokens": 3947,
+                    "OutputTokens": 236,
+                    "ThoughtsTokens": 169,
+                    "TotalTokens": 5945,
+                    "PorcentajeInputTokens": 3.16,
+                    "PorcentajeOutputTokens": 3.31,
+                    "PorcentajeThoughtsTokens": 3.36,
+                    "PorcentajeTotalTokens": 3.1
+                },
+                "por_tipo_operacion": [
+                    {
+                        "InputTokens": 3015,
+                        "OutputTokens": 169,
+                        "ThoughtsTokens": 169,
+                        "TotalTokens": 4946,
+                        "TipoOperacion": "Extraccion"
+                    },
+                    {
+                        "InputTokens": 932,
+                        "OutputTokens": 67,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 999,
+                        "TipoOperacion": "Clasificacion"
+                    }
+                ],
+                "por_modelo": [
+                    {
+                        "InputTokens": 3015,
+                        "OutputTokens": 169,
+                        "ThoughtsTokens": 169,
+                        "TotalTokens": 4946,
+                        "NombreModelo": "gemini-2.5-flash"
+                    },
+                    {
+                        "InputTokens": 932,
+                        "OutputTokens": 67,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 999,
+                        "NombreModelo": "qwen/qwen3.8-27b"
+                    }
+                ],
+                "cantidad_registros": 1,
+                "total_tamanno_img": 103949,
+                "por_gasto_registrado": [
+                    {
+                        "gasto_registrado": true,
+                        "cantidad_registros": 0,
+                        "total_tamanno_img": 0
+                    },
+                    {
+                        "gasto_registrado": false,
+                        "cantidad_registros": 1,
+                        "total_tamanno_img": 103949
+                    }
+                ]
+            },
+            {
+                "NombreUsuario": "lucas",
+                "tokens": {
+                    "InputTokens": 121006,
+                    "OutputTokens": 6889,
+                    "ThoughtsTokens": 4856,
+                    "TotalTokens": 185584,
+                    "PorcentajeInputTokens": 96.84,
+                    "PorcentajeOutputTokens": 96.69,
+                    "PorcentajeThoughtsTokens": 96.64,
+                    "PorcentajeTotalTokens": 96.9
+                },
+                "por_tipo_operacion": [
+                    {
+                        "InputTokens": 95403,
+                        "OutputTokens": 4856,
+                        "ThoughtsTokens": 4856,
+                        "TotalTokens": 157948,
+                        "TipoOperacion": "Extraccion"
+                    },
+                    {
+                        "InputTokens": 25603,
+                        "OutputTokens": 2033,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 27636,
+                        "TipoOperacion": "Clasificacion"
+                    }
+                ],
+                "por_modelo": [
+                    {
+                        "InputTokens": 36438,
+                        "OutputTokens": 2131,
+                        "ThoughtsTokens": 2131,
+                        "TotalTokens": 59630,
+                        "NombreModelo": "gemini-2.5-flash"
+                    },
+                    {
+                        "InputTokens": 25603,
+                        "OutputTokens": 2033,
+                        "ThoughtsTokens": 0,
+                        "TotalTokens": 27636,
+                        "NombreModelo": "qwen/qwen3.6-27b"
+                    },
+                    {
+                        "InputTokens": 58965,
+                        "OutputTokens": 2725,
+                        "ThoughtsTokens": 2725,
+                        "TotalTokens": 98318,
+                        "NombreModelo": "gemini-3.5-flash"
+                    }
+                ],
+                "cantidad_registros": 27,
+                "total_tamanno_img": 3254991,
+                "por_gasto_registrado": [
+                    {
+                        "gasto_registrado": true,
+                        "cantidad_registros": 7,
+                        "total_tamanno_img": 729826
+                    },
+                    {
+                        "gasto_registrado": false,
+                        "cantidad_registros": 20,
+                        "total_tamanno_img": 2525165
+                    }
+                ]
+            }
+        ]
+    }
+}
