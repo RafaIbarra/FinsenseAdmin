@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import request from '../../Api/request'
 
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts'
+
 function Icon({ children, className = 'h-5 w-5' }) {
   return (
     <svg
@@ -16,7 +27,7 @@ function Icon({ children, className = 'h-5 w-5' }) {
 }
 
 function formatNumber(value = 0) {
-  return Number(value).toLocaleString()
+  return Number(value || 0).toLocaleString()
 }
 
 function formatBytes(bytes = 0) {
@@ -33,7 +44,9 @@ function StatCard({ label, value, description, icon }) {
     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-gray-500">{label}</p>
+          <p className="text-sm text-gray-500">
+            {label}
+          </p>
 
           <p className="mt-2 text-2xl font-bold text-gray-900">
             {value}
@@ -67,11 +80,50 @@ function ProgressBar({ percentage }) {
   )
 }
 
+function TooltipGrafico({ active, payload, label }) {
+  if (!active || !payload?.length) {
+    return null
+  }
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-3 shadow-lg">
+      <p className="mb-2 text-sm font-semibold text-gray-900">
+        Día {label}
+      </p>
+
+      <div className="space-y-1.5">
+        {payload.map((item) => (
+          <div
+            key={item.dataKey}
+            className="flex items-center justify-between gap-6 text-xs"
+          >
+            <span className="text-gray-500">
+              {item.name}
+            </span>
+
+            <span className="font-semibold text-gray-900">
+              {formatNumber(item.value)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function DatosModelos() {
   const [datos, setDatos] = useState(null)
   const [cargando, setCargando] = useState(true)
-  const [modeloSeleccionado, setModeloSeleccionado] = useState(null)
-  const [registroSeleccionado, setRegistroSeleccionado] = useState(null)
+
+  const [modeloSeleccionado, setModeloSeleccionado] =
+    useState(null)
+
+  const [registroSeleccionado, setRegistroSeleccionado] =
+    useState(null)
+
+  const [paginaDetalles, setPaginaDetalles] = useState(1)
+
+  const REGISTROS_POR_PAGINA = 10
 
   const carga_datos = async () => {
     try {
@@ -84,9 +136,13 @@ export default function DatosModelos() {
       })
 
       console.log(response.data)
-      setDatos(response.data)
+
+      setDatos(response.data?.estadisticas)
     } catch (error) {
-      console.error('Error al cargar datos de modelos:', error)
+      console.error(
+        'Error al cargar datos de modelos:',
+        error,
+      )
     } finally {
       setCargando(false)
     }
@@ -102,6 +158,7 @@ export default function DatosModelos() {
         <div className="flex min-h-60 items-center justify-center">
           <div className="flex items-center gap-3 text-sm text-gray-500">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-200 border-t-blue-600" />
+
             Cargando datos de modelos...
           </div>
         </div>
@@ -131,7 +188,8 @@ export default function DatosModelos() {
   const thoughtsTokens =
     datos.data_tokens?.total_general?.ThoughtsTokens || 0
 
-  const modelos = datos.data_tokens?.por_modelo || []
+  const modelos =
+    datos.data_tokens?.por_modelo || []
 
   const operaciones =
     datos.data_tokens?.por_tipo_operacion || []
@@ -152,10 +210,56 @@ export default function DatosModelos() {
   )
 
   /*
-   * Esta propiedad todavía no está en el JSON actual.
-   * Cuando el backend la agregue, el componente ya está preparado.
+   * Detalles individuales de los registros.
    */
-  const detallesRegistros = datos.detalles_registros || []
+  const detallesRegistros =
+    datos.detalles_registros || []
+
+  /*
+   * Consumo por fecha.
+   *
+   * Solo se toman los meses que tienen datos.
+   */
+  const consumoPorFecha =
+    datos.data_tokens?.por_fecha?.flatMap(
+      (anno) =>
+        anno.datos
+          ?.filter(
+            (mes) =>
+              Array.isArray(mes.datos) &&
+              mes.datos.length > 0,
+          )
+          .map((mes) => ({
+            Año: anno.Año,
+            NumeroMes: mes.NumeroMes,
+            Mes: mes.Mes,
+            datos: mes.datos,
+          })) || [],
+    ) || []
+
+  /*
+   * Paginación de detalles.
+   */
+
+  const totalPaginasDetalles = Math.ceil(
+    detallesRegistros.length /
+      REGISTROS_POR_PAGINA,
+  )
+
+  const paginaDetallesActual = Math.min(
+    paginaDetalles,
+    Math.max(totalPaginasDetalles, 1),
+  )
+
+  const inicioDetalles =
+    (paginaDetallesActual - 1) *
+    REGISTROS_POR_PAGINA
+
+  const registrosDetallesPagina =
+    detallesRegistros.slice(
+      inicioDetalles,
+      inicioDetalles + REGISTROS_POR_PAGINA,
+    )
 
   return (
     <div className="px-6 py-8 sm:px-8 lg:px-10">
@@ -201,7 +305,12 @@ export default function DatosModelos() {
                 strokeLinejoin="round"
                 d="M12 3v18M3 12h18"
               />
-              <circle cx="12" cy="12" r="8" />
+
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
             </Icon>
           }
         />
@@ -247,6 +356,7 @@ export default function DatosModelos() {
                 strokeLinejoin="round"
                 d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
               />
+
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -275,9 +385,12 @@ export default function DatosModelos() {
         <div className="grid gap-5 lg:grid-cols-2">
 
           {modelos.map((modelo) => {
+
             const porcentaje =
               totalTokens > 0
-                ? (modelo.Resumen.TotalTokens / totalTokens) * 100
+                ? (modelo.Resumen.TotalTokens /
+                    totalTokens) *
+                  100
                 : 0
 
             return (
@@ -299,13 +412,17 @@ export default function DatosModelos() {
                   </div>
 
                   <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
-                    {formatNumber(modelo.Resumen.TotalTokens)}
+                    {formatNumber(
+                      modelo.Resumen.TotalTokens,
+                    )}
                   </span>
 
                 </div>
 
                 <div className="mt-4">
-                  <ProgressBar percentage={porcentaje} />
+                  <ProgressBar
+                    percentage={porcentaje}
+                  />
                 </div>
 
                 <div className="mt-5 grid grid-cols-3 gap-3">
@@ -316,7 +433,9 @@ export default function DatosModelos() {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold text-gray-900">
-                      {formatNumber(modelo.Resumen.InputTokens)}
+                      {formatNumber(
+                        modelo.Resumen.InputTokens,
+                      )}
                     </p>
                   </div>
 
@@ -326,7 +445,9 @@ export default function DatosModelos() {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold text-gray-900">
-                      {formatNumber(modelo.Resumen.OutputTokens)}
+                      {formatNumber(
+                        modelo.Resumen.OutputTokens,
+                      )}
                     </p>
                   </div>
 
@@ -336,7 +457,9 @@ export default function DatosModelos() {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold text-gray-900">
-                      {formatNumber(modelo.Resumen.ThoughtsTokens)}
+                      {formatNumber(
+                        modelo.Resumen.ThoughtsTokens,
+                      )}
                     </p>
                   </div>
 
@@ -356,14 +479,16 @@ export default function DatosModelos() {
 
                   <div className="mt-3 flex flex-wrap gap-2">
 
-                    {modelo.distribucion?.map((item) => (
-                      <span
-                        key={item.TipoOperacion}
-                        className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600"
-                      >
-                        {item.TipoOperacion}
-                      </span>
-                    ))}
+                    {modelo.distribucion?.map(
+                      (item) => (
+                        <span
+                          key={item.TipoOperacion}
+                          className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600"
+                        >
+                          {item.TipoOperacion}
+                        </span>
+                      ),
+                    )}
 
                   </div>
 
@@ -371,7 +496,9 @@ export default function DatosModelos() {
 
                 <button
                   type="button"
-                  onClick={() => setModeloSeleccionado(modelo)}
+                  onClick={() =>
+                    setModeloSeleccionado(modelo)
+                  }
                   className="mt-5 w-full rounded-lg border border-gray-200 py-2.5 text-sm font-medium text-gray-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Ver detalles
@@ -402,10 +529,11 @@ export default function DatosModelos() {
 
           <div className="overflow-x-auto">
 
-            <table className="w-full min-w-150 text-left">
+            <table className="w-full min-w-[600px] text-left">
 
               <thead className="border-b border-gray-100 bg-gray-50">
                 <tr>
+
                   <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     Operación
                   </th>
@@ -425,6 +553,7 @@ export default function DatosModelos() {
                   <th className="px-5 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
                     Total
                   </th>
+
                 </tr>
               </thead>
 
@@ -435,6 +564,7 @@ export default function DatosModelos() {
                     key={operacion.TipoOperacion}
                     className="transition hover:bg-gray-50"
                   >
+
                     <td className="px-5 py-4">
                       <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
                         {operacion.TipoOperacion}
@@ -442,20 +572,29 @@ export default function DatosModelos() {
                     </td>
 
                     <td className="px-5 py-4 text-sm text-gray-600">
-                      {formatNumber(operacion.InputTokens)}
+                      {formatNumber(
+                        operacion.InputTokens,
+                      )}
                     </td>
 
                     <td className="px-5 py-4 text-sm text-gray-600">
-                      {formatNumber(operacion.OutputTokens)}
+                      {formatNumber(
+                        operacion.OutputTokens,
+                      )}
                     </td>
 
                     <td className="px-5 py-4 text-sm text-gray-600">
-                      {formatNumber(operacion.ThoughtsTokens)}
+                      {formatNumber(
+                        operacion.ThoughtsTokens,
+                      )}
                     </td>
 
                     <td className="px-5 py-4 text-right text-sm font-semibold text-gray-900">
-                      {formatNumber(operacion.TotalTokens)}
+                      {formatNumber(
+                        operacion.TotalTokens,
+                      )}
                     </td>
+
                   </tr>
                 ))}
 
@@ -468,6 +607,192 @@ export default function DatosModelos() {
         </div>
 
       </section>
+
+      {/* CONSUMO DIARIO */}
+
+      {consumoPorFecha.length > 0 && (
+        <section className="mb-8">
+
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Consumo diario
+            </h3>
+
+            <p className="mt-1 text-sm text-gray-500">
+              Evolución diaria del consumo de tokens en los meses con actividad.
+            </p>
+          </div>
+
+          <div className="space-y-5">
+
+            {consumoPorFecha.map((mes) => {
+
+              const totalMes = mes.datos.reduce(
+                (total, item) =>
+                  total +
+                  (item.TotalTokens || 0),
+                0,
+              )
+
+              return (
+                <div
+                  key={`${mes.Año}-${mes.NumeroMes}`}
+                  className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+                >
+
+                  {/* CABECERA DEL MES */}
+
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900">
+                        {mes.Mes} {mes.Año}
+                      </h4>
+
+                      <p className="mt-1 text-xs text-gray-400">
+                        {mes.datos.length}{' '}
+                        {mes.datos.length === 1
+                          ? 'día'
+                          : 'días'}{' '}
+                        con actividad
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl bg-blue-50 px-4 py-3">
+                      <p className="text-xs text-blue-500">
+                        Total del mes
+                      </p>
+
+                      <p className="mt-1 text-lg font-bold text-blue-700">
+                        {formatNumber(totalMes)}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* GRÁFICO */}
+
+                  <div className="mt-6 h-[350px] w-full">
+
+                    <ResponsiveContainer
+                      width="100%"
+                      height="100%"
+                    >
+                      <LineChart
+                        data={mes.datos}
+                        margin={{
+                          top: 10,
+                          right: 20,
+                          left: 20,
+                          bottom: 10,
+                        }}
+                      >
+
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          className="stroke-gray-100"
+                        />
+
+                        <XAxis
+                          dataKey="Dia"
+                          tick={{
+                            fontSize: 12,
+                          }}
+                          tickLine={false}
+                          axisLine={false}
+                          label={{
+                            value: 'Día',
+                            position: 'insideBottom',
+                            offset: -5,
+                          }}
+                        />
+
+                        <YAxis
+                          tick={{
+                            fontSize: 11,
+                          }}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) =>
+                            Number(value).toLocaleString()
+                          }
+                        />
+
+                        <Tooltip
+                          content={<TooltipGrafico />}
+                        />
+
+                        <Legend />
+
+                        <Line
+                          type="monotone"
+                          dataKey="InputTokens"
+                          name="Input"
+                          stroke="#2563eb"
+                          strokeWidth={2.5}
+                          dot={{
+                            r: 4,
+                          }}
+                          activeDot={{
+                            r: 6,
+                          }}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="OutputTokens"
+                          name="Output"
+                          stroke="#16a34a"
+                          strokeWidth={2.5}
+                          dot={{
+                            r: 4,
+                          }}
+                          activeDot={{
+                            r: 6,
+                          }}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="ThoughtsTokens"
+                          name="Thoughts"
+                          stroke="#9333ea"
+                          strokeWidth={2.5}
+                          dot={{
+                            r: 4,
+                          }}
+                          activeDot={{
+                            r: 6,
+                          }}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="TotalTokens"
+                          name="Total"
+                          stroke="#111827"
+                          strokeWidth={3}
+                          dot={{
+                            r: 4,
+                          }}
+                          activeDot={{
+                            r: 6,
+                          }}
+                        />
+
+                      </LineChart>
+                    </ResponsiveContainer>
+
+                  </div>
+
+                </div>
+              )
+            })}
+
+          </div>
+
+        </section>
+      )}
 
       {/* USUARIOS */}
 
@@ -525,7 +850,9 @@ export default function DatosModelos() {
                 </div>
 
                 <div className="mt-4">
-                  <ProgressBar percentage={porcentaje} />
+                  <ProgressBar
+                    percentage={porcentaje}
+                  />
                 </div>
 
                 <div className="mt-5 grid grid-cols-3 gap-3">
@@ -536,7 +863,9 @@ export default function DatosModelos() {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {formatNumber(usuario.tokens?.TotalTokens)}
+                      {formatNumber(
+                        usuario.tokens?.TotalTokens,
+                      )}
                     </p>
                   </div>
 
@@ -546,7 +875,9 @@ export default function DatosModelos() {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {formatBytes(usuario.total_tamanno_img)}
+                      {formatBytes(
+                        usuario.total_tamanno_img,
+                      )}
                     </p>
                   </div>
 
@@ -576,23 +907,37 @@ export default function DatosModelos() {
         <section>
 
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Detalles de registros
-            </h3>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
 
-            <p className="mt-1 text-sm text-gray-500">
-              Registros individuales generados por las operaciones de modelos.
-            </p>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Detalles de registros
+                </h3>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Registros individuales generados por las operaciones de modelos.
+                </p>
+              </div>
+
+              <div className="text-sm text-gray-400">
+                {formatNumber(
+                  detallesRegistros.length,
+                )}{' '}
+                registros
+              </div>
+
+            </div>
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
 
             <div className="overflow-x-auto">
 
-              <table className="w-full min-w-200 text-left">
+              <table className="w-full min-w-[800px] text-left">
 
                 <thead className="border-b border-gray-100 bg-gray-50">
                   <tr>
+
                     <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                       ID
                     </th>
@@ -618,71 +963,79 @@ export default function DatosModelos() {
                     </th>
 
                     <th className="px-5 py-4" />
+
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-gray-100">
 
-                  {detallesRegistros.map((registro) => (
-                    <tr
-                      key={registro.Id}
-                      className="transition hover:bg-gray-50"
-                    >
+                  {registrosDetallesPagina.map(
+                    (registro) => (
+                      <tr
+                        key={registro.Id}
+                        className="transition hover:bg-gray-50"
+                      >
 
-                      <td className="px-5 py-4 text-sm font-medium text-gray-900">
-                        #{registro.Id}
-                      </td>
+                        <td className="px-5 py-4 text-sm font-medium text-gray-900">
+                          #{registro.Id}
+                        </td>
 
-                      <td className="px-5 py-4 text-sm text-gray-600">
-                        {registro.usuario}
-                      </td>
+                        <td className="px-5 py-4 text-sm text-gray-600">
+                          {registro.usuario}
+                        </td>
 
-                      <td className="px-5 py-4 text-sm text-gray-500">
-                        {new Date(
-                          registro.FechaRegistro,
-                        ).toLocaleString()}
-                      </td>
+                        <td className="px-5 py-4 text-sm text-gray-500">
+                          {new Date(
+                            registro.FechaRegistro,
+                          ).toLocaleString()}
+                        </td>
 
-                      <td className="px-5 py-4">
-                        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600">
-                          {registro.datos_modelo?.length || 0}
-                        </span>
-                      </td>
-
-                      <td className="px-5 py-4 text-sm text-gray-600">
-                        {formatBytes(registro.tamanno_img)}
-                      </td>
-
-                      <td className="px-5 py-4">
-
-                        {registro.gasto_registrado ? (
-                          <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">
-                            Registrado
+                        <td className="px-5 py-4">
+                          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600">
+                            {registro.datos_modelo
+                              ?.length || 0}
                           </span>
-                        ) : (
-                          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-600">
-                            Pendiente
-                          </span>
-                        )}
+                        </td>
 
-                      </td>
+                        <td className="px-5 py-4 text-sm text-gray-600">
+                          {formatBytes(
+                            registro.tamanno_img,
+                          )}
+                        </td>
 
-                      <td className="px-5 py-4 text-right">
+                        <td className="px-5 py-4">
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setRegistroSeleccionado(registro)
-                          }
-                          className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
-                        >
-                          Ver →
-                        </button>
+                          {registro.gasto_registrado ? (
+                            <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">
+                              Registrado
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-600">
+                              Pendiente
+                            </span>
+                          )}
 
-                      </td>
+                        </td>
 
-                    </tr>
-                  ))}
+                        <td className="px-5 py-4 text-right">
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setRegistroSeleccionado(
+                                registro,
+                              )
+                            }
+                            className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
+                          >
+                            Ver →
+                          </button>
+
+                        </td>
+
+                      </tr>
+                    ),
+                  )}
 
                 </tbody>
 
@@ -692,6 +1045,106 @@ export default function DatosModelos() {
 
           </div>
 
+          {/* PAGINACIÓN */}
+
+          {totalPaginasDetalles > 1 && (
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+              <p className="text-sm text-gray-500">
+                Mostrando{' '}
+                <span className="font-medium text-gray-700">
+                  {inicioDetalles + 1}
+                </span>
+                {' - '}
+                <span className="font-medium text-gray-700">
+                  {Math.min(
+                    inicioDetalles +
+                      REGISTROS_POR_PAGINA,
+                    detallesRegistros.length,
+                  )}
+                </span>
+                {' de '}
+                <span className="font-medium text-gray-700">
+                  {detallesRegistros.length}
+                </span>{' '}
+                registros
+              </p>
+
+              <div className="flex items-center gap-1">
+
+                {/* ANTERIOR */}
+
+                <button
+                  type="button"
+                  disabled={
+                    paginaDetallesActual === 1
+                  }
+                  onClick={() =>
+                    setPaginaDetalles(
+                      (pagina) =>
+                        Math.max(
+                          pagina - 1,
+                          1,
+                        ),
+                    )
+                  }
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  ←
+                </button>
+
+                {/* NÚMEROS */}
+
+                {Array.from(
+                  {
+                    length: totalPaginasDetalles,
+                  },
+                  (_, index) => index + 1,
+                ).map((pagina) => (
+                  <button
+                    key={pagina}
+                    type="button"
+                    onClick={() =>
+                      setPaginaDetalles(pagina)
+                    }
+                    className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                      pagina ===
+                      paginaDetallesActual
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {pagina}
+                  </button>
+                ))}
+
+                {/* SIGUIENTE */}
+
+                <button
+                  type="button"
+                  disabled={
+                    paginaDetallesActual ===
+                    totalPaginasDetalles
+                  }
+                  onClick={() =>
+                    setPaginaDetalles(
+                      (pagina) =>
+                        Math.min(
+                          pagina + 1,
+                          totalPaginasDetalles,
+                        ),
+                    )
+                  }
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  →
+                </button>
+
+              </div>
+
+            </div>
+          )}
+
         </section>
       )}
 
@@ -700,11 +1153,15 @@ export default function DatosModelos() {
       {modeloSeleccionado && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-          onClick={() => setModeloSeleccionado(null)}
+          onClick={() =>
+            setModeloSeleccionado(null)
+          }
         >
           <div
             className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
 
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
@@ -721,7 +1178,9 @@ export default function DatosModelos() {
 
               <button
                 type="button"
-                onClick={() => setModeloSeleccionado(null)}
+                onClick={() =>
+                  setModeloSeleccionado(null)
+                }
                 className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
               >
                 <Icon>
@@ -742,9 +1201,12 @@ export default function DatosModelos() {
                   <p className="text-xs text-gray-400">
                     Input
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {formatNumber(
-                      modeloSeleccionado.Resumen.InputTokens,
+                      modeloSeleccionado
+                        .Resumen
+                        .InputTokens,
                     )}
                   </p>
                 </div>
@@ -753,9 +1215,12 @@ export default function DatosModelos() {
                   <p className="text-xs text-gray-400">
                     Output
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {formatNumber(
-                      modeloSeleccionado.Resumen.OutputTokens,
+                      modeloSeleccionado
+                        .Resumen
+                        .OutputTokens,
                     )}
                   </p>
                 </div>
@@ -764,9 +1229,12 @@ export default function DatosModelos() {
                   <p className="text-xs text-gray-400">
                     Thoughts
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {formatNumber(
-                      modeloSeleccionado.Resumen.ThoughtsTokens,
+                      modeloSeleccionado
+                        .Resumen
+                        .ThoughtsTokens,
                     )}
                   </p>
                 </div>
@@ -775,9 +1243,12 @@ export default function DatosModelos() {
                   <p className="text-xs text-blue-500">
                     Total
                   </p>
+
                   <p className="mt-1 font-semibold text-blue-700">
                     {formatNumber(
-                      modeloSeleccionado.Resumen.TotalTokens,
+                      modeloSeleccionado
+                        .Resumen
+                        .TotalTokens,
                     )}
                   </p>
                 </div>
@@ -785,16 +1256,20 @@ export default function DatosModelos() {
               </div>
 
               <div>
+
                 <h4 className="mb-3 text-sm font-semibold text-gray-900">
                   Distribución por operación
                 </h4>
 
                 <div className="space-y-3">
 
-                  {modeloSeleccionado.distribucion?.map(
-                    (item) => (
+                  {modeloSeleccionado
+                    .distribucion
+                    ?.map((item) => (
                       <div
-                        key={item.TipoOperacion}
+                        key={
+                          item.TipoOperacion
+                        }
                         className="rounded-lg bg-gray-50 p-4"
                       >
 
@@ -805,7 +1280,9 @@ export default function DatosModelos() {
                           </span>
 
                           <span className="text-sm font-semibold text-gray-900">
-                            {formatNumber(item.TotalTokens)}
+                            {formatNumber(
+                              item.TotalTokens,
+                            )}
                           </span>
 
                         </div>
@@ -814,24 +1291,29 @@ export default function DatosModelos() {
 
                           <span>
                             Input:{' '}
-                            {formatNumber(item.InputTokens)}
+                            {formatNumber(
+                              item.InputTokens,
+                            )}
                           </span>
 
                           <span>
                             Output:{' '}
-                            {formatNumber(item.OutputTokens)}
+                            {formatNumber(
+                              item.OutputTokens,
+                            )}
                           </span>
 
                           <span>
                             Thoughts:{' '}
-                            {formatNumber(item.ThoughtsTokens)}
+                            {formatNumber(
+                              item.ThoughtsTokens,
+                            )}
                           </span>
 
                         </div>
 
                       </div>
-                    ),
-                  )}
+                    ))}
 
                 </div>
 
@@ -848,28 +1330,36 @@ export default function DatosModelos() {
       {registroSeleccionado && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-          onClick={() => setRegistroSeleccionado(null)}
+          onClick={() =>
+            setRegistroSeleccionado(null)
+          }
         >
           <div
             className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
 
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
 
               <div>
                 <h3 className="font-semibold text-gray-900">
-                  Registro #{registroSeleccionado.Id}
+                  Registro #
+                  {registroSeleccionado.Id}
                 </h3>
 
                 <p className="mt-1 text-sm text-gray-500">
-                  Usuario: {registroSeleccionado.usuario}
+                  Usuario:{' '}
+                  {registroSeleccionado.usuario}
                 </p>
               </div>
 
               <button
                 type="button"
-                onClick={() => setRegistroSeleccionado(null)}
+                onClick={() =>
+                  setRegistroSeleccionado(null)
+                }
                 className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
               >
                 <Icon>
@@ -884,7 +1374,7 @@ export default function DatosModelos() {
 
             <div className="space-y-6 p-6">
 
-              {/* Datos del registro */}
+              {/* DATOS DEL REGISTRO */}
 
               <div className="grid gap-3 sm:grid-cols-3">
 
@@ -895,7 +1385,8 @@ export default function DatosModelos() {
 
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     {new Date(
-                      registroSeleccionado.FechaRegistro,
+                      registroSeleccionado
+                        .FechaRegistro,
                     ).toLocaleString()}
                   </p>
                 </div>
@@ -907,7 +1398,8 @@ export default function DatosModelos() {
 
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     {formatBytes(
-                      registroSeleccionado.tamanno_img,
+                      registroSeleccionado
+                        .tamanno_img,
                     )}
                   </p>
                 </div>
@@ -930,7 +1422,7 @@ export default function DatosModelos() {
 
               </div>
 
-              {/* Modelos utilizados */}
+              {/* MODELOS UTILIZADOS */}
 
               <div>
 
@@ -940,96 +1432,104 @@ export default function DatosModelos() {
 
                 <div className="space-y-3">
 
-                  {registroSeleccionado.datos_modelo?.map(
-                    (modelo, index) => (
-                      <div
-                        key={`${modelo.NombreModelo}-${index}`}
-                        className="rounded-xl border border-gray-200 p-4"
-                      >
+                  {registroSeleccionado
+                    .datos_modelo
+                    ?.map(
+                      (modelo, index) => (
+                        <div
+                          key={`${modelo.NombreModelo}-${index}`}
+                          className="rounded-xl border border-gray-200 p-4"
+                        >
 
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {modelo.NombreModelo}
-                            </p>
+                            <div>
+                              <p className="font-medium text-gray-900">
+                                {modelo.NombreModelo}
+                              </p>
 
-                            <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600">
-                              {modelo.TipoOperacion}
-                            </span>
+                              <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600">
+                                {modelo.TipoOperacion}
+                              </span>
+                            </div>
+
+                            <div className="text-left sm:text-right">
+
+                              <p className="text-xs text-gray-400">
+                                Total tokens
+                              </p>
+
+                              <p className="font-semibold text-gray-900">
+                                {formatNumber(
+                                  modelo.TotalTokens,
+                                )}
+                              </p>
+
+                            </div>
+
                           </div>
 
-                          <div className="text-left sm:text-right">
-                            <p className="text-xs text-gray-400">
-                              Total tokens
-                            </p>
+                          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
 
-                            <p className="font-semibold text-gray-900">
-                              {formatNumber(
-                                modelo.TotalTokens,
-                              )}
-                            </p>
+                            <div className="rounded-lg bg-gray-50 p-3">
+                              <p className="text-xs text-gray-400">
+                                Input
+                              </p>
+
+                              <p className="mt-1 text-sm font-semibold">
+                                {formatNumber(
+                                  modelo.InputTokens,
+                                )}
+                              </p>
+                            </div>
+
+                            <div className="rounded-lg bg-gray-50 p-3">
+                              <p className="text-xs text-gray-400">
+                                Output
+                              </p>
+
+                              <p className="mt-1 text-sm font-semibold">
+                                {formatNumber(
+                                  modelo.OutputTokens,
+                                )}
+                              </p>
+                            </div>
+
+                            <div className="rounded-lg bg-gray-50 p-3">
+                              <p className="text-xs text-gray-400">
+                                Thoughts
+                              </p>
+
+                              <p className="mt-1 text-sm font-semibold">
+                                {formatNumber(
+                                  modelo.ThoughtsTokens,
+                                )}
+                              </p>
+                            </div>
+
+                            <div className="rounded-lg bg-blue-50 p-3">
+                              <p className="text-xs text-blue-500">
+                                Total
+                              </p>
+
+                              <p className="mt-1 text-sm font-semibold text-blue-700">
+                                {formatNumber(
+                                  modelo.TotalTokens,
+                                )}
+                              </p>
+                            </div>
+
                           </div>
+
+                          <p className="mt-3 text-xs text-gray-400">
+                            {new Date(
+                              modelo.FechaRegistro,
+                            ).toLocaleString()}
+                          </p>
 
                         </div>
-
-                        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-
-                          <div className="rounded-lg bg-gray-50 p-3">
-                            <p className="text-xs text-gray-400">
-                              Input
-                            </p>
-                            <p className="mt-1 text-sm font-semibold">
-                              {formatNumber(
-                                modelo.InputTokens,
-                              )}
-                            </p>
-                          </div>
-
-                          <div className="rounded-lg bg-gray-50 p-3">
-                            <p className="text-xs text-gray-400">
-                              Output
-                            </p>
-                            <p className="mt-1 text-sm font-semibold">
-                              {formatNumber(
-                                modelo.OutputTokens,
-                              )}
-                            </p>
-                          </div>
-
-                          <div className="rounded-lg bg-gray-50 p-3">
-                            <p className="text-xs text-gray-400">
-                              Thoughts
-                            </p>
-                            <p className="mt-1 text-sm font-semibold">
-                              {formatNumber(
-                                modelo.ThoughtsTokens,
-                              )}
-                            </p>
-                          </div>
-
-                          <div className="rounded-lg bg-blue-50 p-3">
-                            <p className="text-xs text-blue-500">
-                              Total
-                            </p>
-                            <p className="mt-1 text-sm font-semibold text-blue-700">
-                              {formatNumber(
-                                modelo.TotalTokens,
-                              )}
-                            </p>
-                          </div>
-
-                        </div>
-
-                        <p className="mt-3 text-xs text-gray-400">
-                          {new Date(
-                            modelo.FechaRegistro,
-                          ).toLocaleString()}
-                        </p>
-
-                      </div>
-                    ),
-                  )}
+                      ),
+                    )}
 
                 </div>
 
