@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-
 import request from '../../../Api/request'
+
 import SeccionImagenes from './components/SeccionImagenes'
 import SeccionCorreos from './components/SeccionCorreos'
+import SeccionUrlsTemporales from './components/SeccionUrlsTemporales'
 import SeccionLogs from './components/SeccionLogs'
 import ModalDetalle from './components/ModalDetalle'
 
@@ -15,11 +16,12 @@ export default function TareasPendientes() {
 
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null)
   const [correoSeleccionado, setCorreoSeleccionado] = useState(null)
+  const [urlTemporalSeleccionada, setUrlTemporalSeleccionada] =
+    useState(null)
 
   const [procesando, setProcesando] = useState(false)
   const [mensajeResultado, setMensajeResultado] = useState(null)
 
-  // NUEVO: logs
   const [logs, setLogs] = useState(null)
   const [cargandoLogs, setCargandoLogs] = useState(true)
   const [errorLogs, setErrorLogs] = useState(null)
@@ -51,7 +53,6 @@ export default function TareasPendientes() {
     }
   }, [])
 
-  // NUEVO
   const carga_datos_logs = useCallback(async () => {
     try {
       setCargandoLogs(true)
@@ -72,7 +73,6 @@ export default function TareasPendientes() {
     }
   }, [])
 
-  // NUEVO: detalle de un log
   const verLog = useCallback(async (nombre) => {
     try {
       setCargandoLog(true)
@@ -141,7 +141,7 @@ export default function TareasPendientes() {
       })
 
       await carga_datos()
-      await carga_datos_logs() // NUEVO: refrescar logs tras procesar
+      await carga_datos_logs()
     } catch (err) {
       console.error(err)
       await esperarMinimo(inicio)
@@ -164,6 +164,9 @@ export default function TareasPendientes() {
   const procesarCorreos = () =>
     ejecutarTarea('ejecutar_envio_correo.py')
 
+  const procesarUrlsTemporales = () =>
+    ejecutarTarea('eliminar_urls_temporales.py')
+
   // ============================================================
   // TOTALES PARA LOS TABS
   // ============================================================
@@ -175,7 +178,10 @@ export default function TareasPendientes() {
   const cantidadCorreosTotal =
     datos?.envio_correos?.Resumen?.CantidadTotalRegistros ?? 0
 
-  // NUEVO: total de logs (suma de todas las keys)
+  const totalUrlsTemporales =
+    datos?.urls_imagenes_temporales?.Resumen
+      ?.CantidadProcesos ?? 0
+
   const totalLogs = Object.values(logs ?? {}).reduce(
     (acc, lista) => acc + (lista?.length ?? 0),
     0
@@ -242,6 +248,11 @@ export default function TareasPendientes() {
             id: 'correos',
             label: 'Envío de correos',
             total: cantidadCorreosTotal,
+          },
+          {
+            id: 'urls',
+            label: 'URLs temporales',
+            total: totalUrlsTemporales,
           },
           { id: 'logs', label: 'Logs', total: totalLogs },
         ].map((tab) => (
@@ -344,6 +355,15 @@ export default function TareasPendientes() {
         />
       )}
 
+      {tabActiva === 'urls' && (
+        <SeccionUrlsTemporales
+          data={datos?.urls_imagenes_temporales}
+          procesando={procesando}
+          onProcesar={procesarUrlsTemporales}
+          onVerDetalle={setUrlTemporalSeleccionada}
+        />
+      )}
+
       {tabActiva === 'logs' &&
         (errorLogs ? (
           <div className="rounded-2xl border border-red-200 bg-red-50 p-5">
@@ -381,6 +401,12 @@ export default function TareasPendientes() {
         titulo="Detalle del correo"
         datos={correoSeleccionado}
         onClose={() => setCorreoSeleccionado(null)}
+      />
+
+      <ModalDetalle
+        titulo="Detalle de proceso"
+        datos={urlTemporalSeleccionada}
+        onClose={() => setUrlTemporalSeleccionada(null)}
       />
     </div>
   )
