@@ -13,6 +13,7 @@ function Navbar() {
 
         <nav className="hidden gap-6 text-sm font-medium text-gray-600 md:flex">
           <Link to="/control-usuario" className="hover:text-gray-900">Control Usuario</Link>
+          <Link to="/empresas" className="hover:text-gray-900">Control Empresas</Link>
           <Link to="/datos-modelos" className="hover:text-gray-900">Datos Modelos</Link>
           <Link to="/tareas-pendientes" className="hover:text-gray-900">Tareas pendientes</Link>
         </nav>
