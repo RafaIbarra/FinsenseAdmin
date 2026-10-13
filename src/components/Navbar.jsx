@@ -32,9 +32,9 @@ function Navbar() {
     .toUpperCase()
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="relative flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl shadow-slate-950/40 backdrop-blur-xl sm:px-5">
+    <header className="fixed inset-x-0 top-0 z-50 w-full">
+      <div className="w-full">
+        <div className="relative flex w-full items-center justify-between border-b border-white/10 bg-slate-950/95 px-4 py-3 shadow-xl shadow-slate-950/20 sm:px-6 lg:px-8">
           {/* MARCA + SLOT DE ICONO */}
           <Link
             to="/home"
