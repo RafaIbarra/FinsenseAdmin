@@ -22,24 +22,23 @@ const accesos = [
     ),
   },
   {
-    to: '/empresas',
-    title: 'Control Empresas',
-    description: 'Gestión empresas registradas.',
-    icon: ( 
-      <svg 
-        className="h-7 w-7" 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor" 
-        strokeWidth="1.8" 
-      > 
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01M15 12v.01M15 15v.01M15 18v.01" 
-          /> 
-      </svg> 
-      ),
+    to: '/catalogo-base',
+    title: 'Catalogo Base',
+    description: 'Administración de datos maestros del sistema.',
+    icon: (
+  <svg
+    className="h-7 w-7"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.8"
+  >
+    <rect x="3" y="3" width="8" height="8" rx="1.5" />
+    <rect x="13" y="3" width="8" height="8" rx="1.5" />
+    <rect x="3" y="13" width="8" height="8" rx="1.5" />
+    <rect x="13" y="13" width="8" height="8" rx="1.5" />
+  </svg>
+),
   },
   {
     to: '/datos-modelos',

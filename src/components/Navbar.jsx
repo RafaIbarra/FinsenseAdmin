@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 
 const enlaces = [
   { to: '/control-usuario', label: 'Control Usuario' },
-  { to: '/empresas', label: 'Control Empresas' },
+  { to: '/catalogo-base', label: 'Catalogo Base' },
   { to: '/datos-modelos', label: 'Datos Modelos' },
   { to: '/tareas-pendientes', label: 'Tareas pendientes' },
 ]

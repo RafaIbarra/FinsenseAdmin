@@ -6,7 +6,7 @@ import ControlUsuarios from './pages/ControlUsuarios'
 // import TareasPendientes from './pages/TareasPendientes'
 import TareasPendientes from './pages/TareasPendientes/TareasPendientes'
 import DatosModelos from './pages/DatosModelos/DatosModelos'
-import Empresas from './pages/Empresas'
+import CatalogoBase from './pages/CatalogoBase/CatalogoBase'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from '../context/AuthContext'
 
@@ -30,7 +30,7 @@ function App() {
             <Route path="/control-usuario" element={<ControlUsuarios />} />
             <Route path="/datos-modelos" element={<DatosModelos />} />
             <Route path="/tareas-pendientes" element={<TareasPendientes />} />
-            <Route path="/empresas" element={<Empresas />} />
+            <Route path="/catalogo-base" element={<CatalogoBase />} />
             
           </Route>
         </Routes>
