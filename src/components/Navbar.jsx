@@ -7,6 +7,7 @@ const enlaces = [
   { to: '/catalogo-base', label: 'Catalogo Base' },
   { to: '/datos-modelos', label: 'Datos Modelos' },
   { to: '/tareas-pendientes', label: 'Tareas pendientes' },
+  { to: '/reportes-comentarios', label: 'Reportes y Comentarios' },
 ]
 
 const IconoLogo = (

@@ -7,6 +7,7 @@ import ControlUsuarios from './pages/ControlUsuarios'
 import TareasPendientes from './pages/TareasPendientes/TareasPendientes'
 import DatosModelos from './pages/DatosModelos/DatosModelos'
 import CatalogoBase from './pages/CatalogoBase/CatalogoBase'
+import ReportesComentarios from './pages/ReportesComentarios/ReportesComentarios'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from '../context/AuthContext'
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/datos-modelos" element={<DatosModelos />} />
             <Route path="/tareas-pendientes" element={<TareasPendientes />} />
             <Route path="/catalogo-base" element={<CatalogoBase />} />
+            <Route path="/reportes-comentarios" element={<ReportesComentarios />} />
             
           </Route>
         </Routes>

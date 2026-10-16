@@ -95,6 +95,37 @@ const accesos = [
       </svg>
     ),
   },
+  {
+    to: '/reportes-comentarios',
+    title: 'Reportes y Comentarios',
+    description:
+      'Revisa los registros reportados por los usuarios, consulta su detalle y registra la resolución de cada caso.',
+    icon: (
+      <svg
+        className="h-7 w-7"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 7v3.5"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 13.25h.01"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 3h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-4 4v-4H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+        />
+      </svg>
+    ),
+  },
 ]
 
 function Home() {
