@@ -175,14 +175,64 @@ function Grupo({ titulo, valor, nivel }) {
  * Muestra cualquier JSON con formato, sin campos fijos:
  * solo se dibujan las keys que existan en el dato.
  */
+// export default function VisorJson({ data }) {
+//   if (data === null || data === undefined) {
+//     return (
+//       <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
+//         <p className="text-xs text-gray-400 italic">Sin datos de respuesta disponibles</p>
+//       </div>
+//     )
+//   }
+
+//   const textoJson = typeof data === 'string' ? data : JSON.stringify(data, null, 2)
+
+//   return (
+//     <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-950 shadow-inner">
+//       {/* Barra superior decorativa estilo terminal */}
+//       <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900/60 px-4 py-2">
+//         <div className="flex items-center gap-1.5">
+//           <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+//           <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
+//           <span className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
+//         </div>
+//         <span className="text-[11px] font-medium uppercase tracking-wider text-gray-400 font-mono">
+//           JSON Viewer
+//         </span>
+//       </div>
+
+//       {/* Contenido con scroll optimizado */}
+//       <pre className="max-h-96 overflow-auto p-4 text-xs font-mono leading-relaxed text-emerald-400 scrollbar-thin scrollbar-thumb-gray-800">
+//         {textoJson}
+//       </pre>
+//     </div>
+//   )
+// }
 export default function VisorJson({ data }) {
   if (data === null || data === undefined) {
-    return <p className="text-sm text-gray-400">Sin datos.</p>
+    return (
+      <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
+        <p className="text-xs text-gray-400 italic">Sin datos de respuesta disponibles</p>
+      </div>
+    )
   }
 
+  const textoJson = typeof data === 'string' ? data : JSON.stringify(data, null, 2)
+
   return (
-    <div className="text-sm">
-      <Nodo valor={data} nivel={1} />
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50/70">
+      <div className="border-b border-gray-200 bg-gray-100/80 px-4 py-2.5 flex items-center justify-between">
+        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">
+          Estructura de datos (JSON)
+        </span>
+        <span className="text-[11px] font-mono text-gray-400">
+          {typeof data === 'string' ? 'Texto plano' : 'Objeto'}
+        </span>
+      </div>
+      <div className="p-4">
+        <pre className="max-h-96 overflow-auto rounded-lg bg-white p-4 text-xs font-mono text-gray-800 shadow-sm ring-1 ring-gray-900/5 leading-relaxed">
+          {textoJson}
+        </pre>
+      </div>
     </div>
   )
 }
