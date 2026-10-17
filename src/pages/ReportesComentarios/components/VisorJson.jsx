@@ -136,38 +136,38 @@ function Nodo({ valor, nivel }) {
 
 // -------------------- GRUPO COLAPSABLE --------------------
 
-function Grupo({ titulo, valor, nivel }) {
-  const [abierto, setAbierto] = useState(nivel <= 2)
+// function Grupo({ titulo, valor, nivel }) {
+//   const [abierto, setAbierto] = useState(nivel <= 2)
 
-  return (
-    <div className="rounded-lg border border-gray-200 bg-white">
-      <button
-        type="button"
-        onClick={() => setAbierto((a) => !a)}
-        className="flex w-full items-center justify-between gap-3 rounded-lg bg-gray-50 px-4 py-2.5 text-left transition hover:bg-gray-100"
-      >
-        <span className="text-sm font-semibold text-gray-800">
-          {titulo}
-        </span>
-        <svg
-          className={`h-4 w-4 text-gray-400 transition ${
-            abierto ? 'rotate-180' : ''
-          }`}
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" />
-        </svg>
-      </button>
+//   return (
+//     <div className="rounded-lg border border-gray-200 bg-white">
+//       <button
+//         type="button"
+//         onClick={() => setAbierto((a) => !a)}
+//         className="flex w-full items-center justify-between gap-3 rounded-lg bg-gray-50 px-4 py-2.5 text-left transition hover:bg-gray-100"
+//       >
+//         <span className="text-sm font-semibold text-gray-800">
+//           {titulo}
+//         </span>
+//         <svg
+//           className={`h-4 w-4 text-gray-400 transition ${
+//             abierto ? 'rotate-180' : ''
+//           }`}
+//           viewBox="0 0 20 20"
+//           fill="currentColor"
+//         >
+//           <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" />
+//         </svg>
+//       </button>
 
-      {abierto && (
-        <div className="px-4 py-2">
-          <Nodo valor={valor} nivel={nivel} />
-        </div>
-      )}
-    </div>
-  )
-}
+//       {abierto && (
+//         <div className="px-4 py-2">
+//           <Nodo valor={valor} nivel={nivel} />
+//         </div>
+//       )}
+//     </div>
+//   )
+// }
 
 // -------------------- EXPORT --------------------
 
@@ -207,32 +207,349 @@ function Grupo({ titulo, valor, nivel }) {
 //     </div>
 //   )
 // }
-export default function VisorJson({ data }) {
-  if (data === null || data === undefined) {
+// export default function VisorJson({ data }) {
+//   if (data === null || data === undefined) {
+//     return (
+//       <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
+//         <p className="text-xs text-gray-400 italic">Sin datos de respuesta disponibles</p>
+//       </div>
+//     )
+//   }
+
+//   const textoJson = typeof data === 'string' ? data : JSON.stringify(data, null, 2)
+
+//   return (
+//     <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50/70">
+//       <div className="border-b border-gray-200 bg-gray-100/80 px-4 py-2.5 flex items-center justify-between">
+//         <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">
+//           Estructura de datos (JSON)
+//         </span>
+//         <span className="text-[11px] font-mono text-gray-400">
+//           {typeof data === 'string' ? 'Texto plano' : 'Objeto'}
+//         </span>
+//       </div>
+//       <div className="p-4">
+//         <pre className="max-h-96 overflow-auto rounded-lg bg-white p-4 text-xs font-mono text-gray-800 shadow-sm ring-1 ring-gray-900/5 leading-relaxed">
+//           {textoJson}
+//         </pre>
+//       </div>
+//     </div>
+//   )
+// }
+
+
+// export default function VisorJson({ data }) {
+//   const [modalAbierto, setModalAbierto] = useState(false)
+
+//   if (data === null || data === undefined) {
+//     return (
+//       <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
+//         <p className="text-xs italic text-gray-400">Sin datos de respuesta disponibles</p>
+//       </div>
+//     )
+//   }
+
+//   const textoJson = typeof data === 'string' ? data : JSON.stringify(data, null, 2)
+
+//   return (
+//     <>
+//       <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50/70">
+//         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-100/80 px-4 py-2.5">
+//           <span className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+//             Estructura de datos (JSON)
+//           </span>
+
+//           <button
+//             type="button"
+//             onClick={() => setModalAbierto(true)}
+//             className="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+//           >
+//             <svg className="h-3.5 w-3.5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+//               <path d="M13.25 2.5a.75.75 0 000 1.5h2.19l-4.22 4.22a.75.75 0 001.06 1.06l4.22-4.22v2.19a.75.75 0 001.5 0v-4.75a.75.75 0 00-.75-.75h-4.75zM6.75 17.5a.75.75 0 000-1.5H4.56l4.22-4.22a.75.75 0 10-1.06-1.06L3.5 14.94v-2.19a.75.75 0 00-1.5 0v4.75c0 .414.336.75.75.75h4.75z" />
+//             </svg>
+//             Ampliar vista
+//           </button>
+//         </div>
+
+//         <div className="p-4">
+//           <pre className="max-h-96 overflow-auto rounded-lg bg-white p-4 text-xs font-mono leading-relaxed text-gray-800 shadow-sm ring-1 ring-gray-900/5">
+//             {textoJson}
+//           </pre>
+//         </div>
+//       </div>
+
+//       {/* MODAL VISTA AMPLIADA */}
+//       {modalAbierto && (
+//         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+//           {/* Fondo oscuro traslúcido */}
+//           <div
+//             className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"
+//             onClick={() => setModalAbierto(false)}
+//           />
+
+//           {/* Contenedor Modal */}
+//           <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl border border-gray-200 bg-white shadow-2xl">
+//             {/* Header Modal */}
+//             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+//               <div>
+//                 <h3 className="text-base font-semibold text-gray-900">
+//                   Visor de JSON — Vista ampliada
+//                 </h3>
+//                 <p className="text-xs text-gray-500">
+//                   Inspección completa de la estructura de respuesta
+//                 </p>
+//               </div>
+
+//               <button
+//                 type="button"
+//                 onClick={() => setModalAbierto(false)}
+//                 className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+//               >
+//                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                   <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+//                 </svg>
+//               </button>
+//             </div>
+
+//             {/* Cuerpo del Modal con scroll amplio */}
+//             <div className="flex-1 overflow-auto bg-gray-50/50 p-6">
+//               <pre className="min-h-[50vh] overflow-auto rounded-xl bg-white p-6 text-xs font-mono leading-relaxed text-gray-800 shadow-sm ring-1 ring-gray-900/5">
+//                 {textoJson}
+//               </pre>
+//             </div>
+
+//             {/* Footer Modal */}
+//             <div className="flex justify-end border-t border-gray-200 bg-gray-50/50 px-6 py-3">
+//               <button
+//                 type="button"
+//                 onClick={() => setModalAbierto(false)}
+//                 className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+//               >
+//                 Cerrar
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   )
+// }
+
+// import { useState } from 'react'
+
+// Componente recursivo para renderizar nodos interactivos (Objetos / Arrays / Valores)
+
+// import { useState } from 'react'
+
+// Componente auxiliar para renderizar líneas con soporte de colapso estilo Postman
+function LineaJson({ clave, valor, nivel = 0, esUltimo = true }) {
+  const [abierto, setAbierto] = useState(true)
+
+  const esObjeto = valor !== null && typeof valor === 'object'
+  const esArray = Array.isArray(valor)
+  const identacion = nivel * 20 // Píxeles de sangría por nivel
+
+  if (!esObjeto) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
-        <p className="text-xs text-gray-400 italic">Sin datos de respuesta disponibles</p>
+      <div className="flex font-mono text-xs leading-5" style={{ paddingLeft: `${identacion}px` }}>
+        <span className="w-4 shrink-0" />
+        {clave !== undefined && <span className="text-gray-600">"{clave}": </span>}
+        <span
+          className={`ml-1 ${
+            typeof valor === 'string'
+              ? 'text-emerald-700'
+              : typeof valor === 'number'
+              ? 'text-blue-600'
+              : typeof valor === 'boolean'
+              ? 'text-purple-600'
+              : 'text-gray-500'
+          }`}
+        >
+          {JSON.stringify(valor)}
+        </span>
+        {!esUltimo && <span className="text-gray-400">,</span>}
       </div>
     )
   }
 
-  const textoJson = typeof data === 'string' ? data : JSON.stringify(data, null, 2)
+  const entradas = Object.entries(valor)
+  const esVacio = entradas.length === 0
+  const delimitadorInicio = esArray ? '[' : '{'
+  const delimitadorFin = esArray ? ']' : '}'
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50/70">
-      <div className="border-b border-gray-200 bg-gray-100/80 px-4 py-2.5 flex items-center justify-between">
-        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">
-          Estructura de datos (JSON)
-        </span>
-        <span className="text-[11px] font-mono text-gray-400">
-          {typeof data === 'string' ? 'Texto plano' : 'Objeto'}
-        </span>
+    <div className="font-mono text-xs leading-5">
+      <div className="flex items-center" style={{ paddingLeft: `${identacion}px` }}>
+        {/* Botón de flecha colapsable */}
+        {!esVacio ? (
+          <button
+            type="button"
+            onClick={() => setAbierto(!abierto)}
+            className="flex h-4 w-4 shrink-0 items-center justify-center text-gray-400 hover:text-gray-700 transition"
+          >
+            <svg
+              className={`h-3 w-3 transform transition-transform ${abierto ? 'rotate-90' : ''}`}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        ) : (
+          <span className="w-4 shrink-0" />
+        )}
+
+        {clave !== undefined && <span className="text-gray-600 ml-0.5">"{clave}": </span>}
+        <span className="text-gray-500 font-bold ml-1">{delimitadorInicio}</span>
+
+        {!abierto && (
+          <span
+            onClick={() => setAbierto(true)}
+            className="mx-1 cursor-pointer rounded bg-gray-200 px-1.5 py-0.2 text-[10px] text-gray-600 hover:bg-gray-300 transition"
+          >
+            {esArray ? `${valor.length} items` : `${entradas.length} keys`}
+          </span>
+        )}
+
+        {(!abierto || esVacio) && (
+          <span className="text-gray-500 font-bold">
+            {delimitadorFin}
+            {!esUltimo && <span className="text-gray-400">,</span>}
+          </span>
+        )}
       </div>
-      <div className="p-4">
-        <pre className="max-h-96 overflow-auto rounded-lg bg-white p-4 text-xs font-mono text-gray-800 shadow-sm ring-1 ring-gray-900/5 leading-relaxed">
-          {textoJson}
-        </pre>
-      </div>
+
+      {abierto && !esVacio && (
+        <>
+          {entradas.map(([k, v], index) => (
+            <LineaJson
+              key={k}
+              clave={esArray ? undefined : k}
+              valor={v}
+              nivel={nivel + 1}
+              esUltimo={index === entradas.length - 1}
+            />
+          ))}
+          <div className="flex" style={{ paddingLeft: `${identacion}px` }}>
+            <span className="w-4 shrink-0" />
+            <span className="text-gray-500 font-bold">
+              {delimitadorFin}
+              {!esUltimo && <span className="text-gray-400">,</span>}
+            </span>
+          </div>
+        </>
+      )}
     </div>
+  )
+}
+
+export default function VisorJson({ data }) {
+  const [modalAbierto, setModalAbierto] = useState(false)
+
+  if (data === null || data === undefined) {
+    return (
+      <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center">
+        <p className="text-xs italic text-gray-400">Sin datos de respuesta disponibles</p>
+      </div>
+    )
+  }
+
+  let objetoJson = data
+  if (typeof data === 'string') {
+    try {
+      objetoJson = JSON.parse(data)
+    } catch {
+      objetoJson = data
+    }
+  }
+
+  return (
+    <>
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50/70">
+        {/* Cabecera */}
+        <div className="flex items-center justify-between border-b border-gray-200 bg-gray-100/80 px-4 py-2.5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+            Estructura de datos (JSON)
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setModalAbierto(true)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+          >
+            <svg className="h-3.5 w-3.5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.25 2.5a.75.75 0 000 1.5h2.19l-4.22 4.22a.75.75 0 001.06 1.06l4.22-4.22v2.19a.75.75 0 001.5 0v-4.75a.75.75 0 00-.75-.75h-4.75zM6.75 17.5a.75.75 0 000-1.5H4.56l4.22-4.22a.75.75 0 10-1.06-1.06L3.5 14.94v-2.19a.75.75 0 00-1.5 0v4.75c0 .414.336.75.75.75h4.75z" />
+            </svg>
+            Ampliar vista
+          </button>
+        </div>
+
+        {/* Bloque tipo Postman */}
+        <div className="max-h-96 overflow-auto bg-white p-4 ring-1 ring-gray-900/5">
+          {typeof objetoJson === 'object' && objetoJson !== null ? (
+            <LineaJson valor={objetoJson} />
+          ) : (
+            <pre className="text-xs font-mono text-gray-800">{String(objetoJson)}</pre>
+          )}
+        </div>
+      </div>
+
+      {/* MODAL VISTA AMPLIADA */}
+      {modalAbierto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setModalAbierto(false)}
+          />
+
+          <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl border border-gray-200 bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+              <div>
+                <h3 className="text-base font-semibold text-gray-900">
+                  Visor de JSON — Vista ampliada
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Inspección completa en bloque interactivo
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setModalAbierto(false)}
+                className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-auto bg-gray-50/50 p-6">
+              <div className="min-h-[50vh] overflow-auto rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
+                {typeof objetoJson === 'object' && objetoJson !== null ? (
+                  <LineaJson valor={objetoJson} />
+                ) : (
+                  <pre className="text-xs font-mono text-gray-800">{String(objetoJson)}</pre>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end border-t border-gray-200 bg-gray-50/50 px-6 py-3">
+              <button
+                type="button"
+                onClick={() => setModalAbierto(false)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
