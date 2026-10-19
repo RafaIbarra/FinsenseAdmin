@@ -348,10 +348,17 @@ function LineaJson({ clave, valor, nivel = 0, esUltimo = true }) {
   const esObjeto = valor !== null && typeof valor === 'object'
   const esArray = Array.isArray(valor)
   const identacion = nivel * 20 // Píxeles de sangría por nivel
+  const estiloIndentacion = {
+    paddingLeft: `${identacion}px`,
+    backgroundImage:
+      'repeating-linear-gradient(to right, transparent 0, transparent 19px, #e5e7eb 19px, #e5e7eb 20px)',
+    backgroundSize: `${identacion}px 100%`,
+    backgroundRepeat: 'no-repeat',
+  }
 
   if (!esObjeto) {
     return (
-      <div className="flex font-mono text-xs leading-5" style={{ paddingLeft: `${identacion}px` }}>
+      <div className="flex font-mono text-xs leading-5" style={estiloIndentacion}>
         <span className="w-4 shrink-0" />
         {clave !== undefined && <span className="text-gray-600">"{clave}": </span>}
         <span
@@ -379,7 +386,7 @@ function LineaJson({ clave, valor, nivel = 0, esUltimo = true }) {
 
   return (
     <div className="font-mono text-xs leading-5">
-      <div className="flex items-center" style={{ paddingLeft: `${identacion}px` }}>
+      <div className="flex items-center" style={estiloIndentacion}>
         {/* Botón de flecha colapsable */}
         {!esVacio ? (
           <button
@@ -434,7 +441,7 @@ function LineaJson({ clave, valor, nivel = 0, esUltimo = true }) {
               esUltimo={index === entradas.length - 1}
             />
           ))}
-          <div className="flex" style={{ paddingLeft: `${identacion}px` }}>
+          <div className="flex" style={estiloIndentacion}>
             <span className="w-4 shrink-0" />
             <span className="text-gray-500 font-bold">
               {delimitadorFin}

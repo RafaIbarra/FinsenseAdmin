@@ -239,63 +239,69 @@ export default function DetalleReporte({ idReporte, onVolver }) {
       </div>
 
       <div className="space-y-6">
-        {/* DATOS GENERALES */}
-        <Tarjeta titulo="Datos del reporte">
-          <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <Campo label="Id">{reporte.id}</Campo>
-            <Campo label="Usuario">{reporte.user_name}</Campo>
-            <Campo label="Nombre completo">
-              {[reporte.nombre_usuario, reporte.apellido_usuario]
-                .filter(Boolean)
-                .join(' ') || '-'}
-            </Campo>
-            <Campo label="Id de usuario">
-              {reporte.id_usuario ?? reporte.usuario_id ?? '-'}
-            </Campo>
-            <Campo label="Fecha de registro">
-              {reporte.fecha_registro}
-            </Campo>
-            <Campo label="Fecha de resolución">
-              {reporte.fecha_resolucion || '-'}
-            </Campo>
-          </dl>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
+          {/* DATOS GENERALES */}
+          <div className="lg:col-span-7">
+            <Tarjeta titulo="Datos del reporte">
+              <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <Campo label="Id">{reporte.id}</Campo>
+                <Campo label="Usuario">{reporte.user_name}</Campo>
+                <Campo label="Nombre completo">
+                  {[reporte.nombre_usuario, reporte.apellido_usuario]
+                    .filter(Boolean)
+                    .join(' ') || '-'}
+                </Campo>
+                <Campo label="Id de usuario">
+                  {reporte.id_usuario ?? reporte.usuario_id ?? '-'}
+                </Campo>
+                <Campo label="Fecha de registro">
+                  {reporte.fecha_registro}
+                </Campo>
+                <Campo label="Fecha de resolución">
+                  {reporte.fecha_resolucion || '-'}
+                </Campo>
+              </dl>
 
-          <div className="mt-5 border-t border-gray-100 pt-5">
-            <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Observación del usuario
-            </dt>
-            <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900">
-              {reporte.observacion || '-'}
-            </dd>
+              <div className="mt-5 border-t border-gray-100 pt-5">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  Observación del usuario
+                </dt>
+                <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900">
+                  {reporte.observacion || '-'}
+                </dd>
+              </div>
+            </Tarjeta>
           </div>
-        </Tarjeta>
 
-        {/* IMÁGENES */}
-        <Tarjeta titulo={`Imágenes (${imagenes.length})`}>
-          {imagenes.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              Este reporte no tiene imágenes.
-            </p>
-          ) : (
-            <div className="flex flex-wrap gap-4">
-              {imagenes.map((url, i) => (
-                <button
-                  key={url}
-                  type="button"
-                  onClick={() => setImagenIndice(i)}
-                  className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition hover:border-blue-300 hover:shadow"
-                  title="Ver imagen ampliada"
-                >
-                  <img
-                    src={url}
-                    alt={`Imagen ${i + 1}`}
-                    className="h-40 w-40 object-cover transition group-hover:opacity-90"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </Tarjeta>
+          {/* IMÁGENES */}
+          <div className="lg:col-span-3">
+            <Tarjeta titulo={`Imágenes (${imagenes.length})`}>
+              {imagenes.length === 0 ? (
+                <p className="text-sm text-gray-500">
+                  Este reporte no tiene imágenes.
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-4">
+                  {imagenes.map((url, i) => (
+                    <button
+                      key={url}
+                      type="button"
+                      onClick={() => setImagenIndice(i)}
+                      className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition hover:border-blue-300 hover:shadow"
+                      title="Ver imagen ampliada"
+                    >
+                      <img
+                        src={url}
+                        alt={`Imagen ${i + 1}`}
+                        className="h-40 w-40 object-cover transition group-hover:opacity-90"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Tarjeta>
+          </div>
+        </div>
 
         {/* RESPUESTA (JSON variable) */}
         <Tarjeta titulo="Respuesta del sistema">
